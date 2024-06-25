@@ -39,3 +39,20 @@ def exibir_tabela(btn_diario, btn_ratings, btn_meta):
 # Executa o aplicativo
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
+    # Adicionando o HTML do botão de seleção como uma nova coluna nos dados
+    for record in alcadas_data.to_dict('records'):
+        record['Seleção'] = '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"> <label class="form-check-label" for="defaultCheck1"> Checkbox padrão </label> </div>'
+    
+    # Adicionando a nova coluna à definição de colunas, com apresentação como markdown
+    columns = [{"name": i, "id": i} for i in alcadas_data.columns] + [{"name": "Seleção", "id": "Seleção", "presentation": "markdown"}]
+    
+    # Agora, use a lista modificada de colunas na sua DataTable
+    dash_table.DataTable(
+        data=alcadas_data.to_dict('records'), 
+        id='alcadas', 
+        columns=columns,  # Use a lista modificada de colunas aqui
+        markdown_options={"html": True},  # Permitir HTML no markdown
+        # O restante da configuração da tabela permanece o mesmo
+    )

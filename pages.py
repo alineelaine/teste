@@ -182,7 +182,7 @@ def pendencias_page():
                         'backgroundColor': 'white'
                     }
                 ]
-            ), html.Button("Salvar", id="save-button", n_clicks=0)
+            ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
         ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
     ])
    
