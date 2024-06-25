@@ -116,3 +116,17 @@ if __name__ == '__main__':
                 ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-top": "20px"})
             ]), style={'marginLeft': '100px', 'marginTop': '100px'}),
         ])
+    
+
+# Supondo que transferencias_data é um DataFrame pandas
+
+# Simplifique o HTML para teste
+simple_checkbox_html = '<input type="checkbox">'
+
+# Adicione o HTML simplificado como uma nova coluna
+transferencias_data['Seleção'] = simple_checkbox_html
+
+# Atualize a definição de colunas para incluir a nova coluna com apresentação markdown
+columns = [{"name": i, "id": i} for i in transferencias_data.columns] + [{"name": "Seleção", "id": "Seleção", "presentation": "markdown"}]
+
+# Certifique-se de que markdown_options={"html": True} está habilitado na DataTable
