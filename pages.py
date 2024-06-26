@@ -397,9 +397,8 @@ def historico_page():
 
 def ajustes_page():
     return html.Div([
-    html.Button('Relatório Diário', id='btn-diario'),
-    html.Button('Ratings Divergentes', id='btn-ratings'),
-    html.Button('Limite Meta', id='btn-meta'),
+    html.Button('Relatório Diário', id='btn-diario', className="btn", style={"background-color": "#f8f9fa", "border-color": "#6c757d", "margin-right": "10px", "margin-left": "300px", "margin-top": "50px"}),
+    html.Button('Ratings Divergentes', id='btn-ratings', className="btn", style={"background-color": "#f8f9fa", "border-color": "#6c757d", "margin-right": "10px", "margin-top": "50px"}),
+    html.Button('Limite Meta', id='btn-meta', className="btn", style={"background-color": "#f8f9fa", "border-color": "#6c757d", "margin-top": "50px"}),
     html.Div(id='conteudo-tabela')
 ])
-
