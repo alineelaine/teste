@@ -1,13 +1,16 @@
-from dash import html, dash_table
+from dash import html, dash_table, dcc
 import dash_bootstrap_components as dbc
 from data import pendencias_all_data, historico_all_data, alcadas_all_data, transferencias_all_data
-import tkinter as tk
-from tkinter import ttk
 import pandas as pd
 
 
 def pendencias_page():
     alcadas_data, email_data, comite_data, transferencias_data = pendencias_all_data()
+    columns = [
+    {"name": i, "id": i} for i in alcadas_data.columns if i != "RESPONDIDO"
+] + [
+    {"name": "RESPONDIDO", "id": "RESPONDIDO", "type": "text", "editable": True}
+]
     return html.Div([
         dbc.Row([
             dbc.Col(dbc.Card([
@@ -36,7 +39,8 @@ def pendencias_page():
             dash_table.DataTable(
                 data=alcadas_data.to_dict('records'), 
                 id='alcadas', 
-                columns=[{"name": i, "id": i} for i in alcadas_data.columns], 
+                columns=columns, 
+                editable=True,
                 style_table={
                     'margin': 'auto', 
                     'marginRight': 'auto',
@@ -68,8 +72,10 @@ def pendencias_page():
                         'backgroundColor': 'white'
                     }
                 ],
-            ), html.Button("Salvar", id="save-button", n_clicks=0)
-        ]), style={'marginLeft': '100px', 'marginTop': '100px'}),
+            ),
+        html.Button("Salvar", id="save-button", className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"}),
+        html.Div(id='placeholder-div')  # Placeholder para mensagens de retorno
+    ]), style={'marginLeft': '100px', 'marginTop': '100px'}),
         dbc.Card(dbc.CardBody([
             html.H2("Tabela Email", className="text-center"),
             dash_table.DataTable(
@@ -106,7 +112,7 @@ def pendencias_page():
                         'backgroundColor': 'white'
                     }
                 ]
-            ), html.Button("Salvar", id="save-button", n_clicks=0)
+            ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
         ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
         dbc.Card(dbc.CardBody([
             html.H2("Tabela Comitê", className="text-center"),
@@ -144,7 +150,7 @@ def pendencias_page():
                         'backgroundColor': 'white'
                     }
                 ]
-            ), html.Button("Salvar", id="save-button", n_clicks=0)
+            ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
         ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
         dbc.Card(dbc.CardBody([
             html.H2("Tabela Transferências", className="text-center"),
