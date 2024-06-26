@@ -26,7 +26,8 @@ def update_respondido(active_cell, rows):
     print("Callback update_respondido chamado.")  # Log de impressão adicionado
     if active_cell and active_cell['column_id'] == 'RESPONDIDO':
         row = active_cell['row']
-        value = rows[row]['RESPONDIDO']
+        # Uso de .get() para evitar KeyError, com um valor padrão caso 'RESPONDIDO' não exista
+        value = rows[row].get('RESPONDIDO', "Não Respondido")
         rows[row]['RESPONDIDO'] = "Respondido" if value != "Respondido" else "Não Respondido"
     return rows
 
