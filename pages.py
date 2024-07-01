@@ -212,7 +212,6 @@ def historico_page():
                             {"name": "Grupo", "id": "Grupo"},
                             {"name": "Evento", "id": "Evento"},
                             {"name": "Mesa", "id": "Mesa"},
-                            {"name": "ATA", "id": "ATA"},
                             {"name": "Data de Cadastro", "id": "DataCadastro"},
                             {"name": "Aprovação", "id": "Aprovacao"}
                         ],
@@ -242,7 +241,7 @@ def historico_page():
                             'border-right': 'none',
                         },
                         style_cell_conditional=[
-                            {'if': {'column_id': c}, 'textAlign': 'left'} for c in ['Emissor', 'Grupo', 'Evento', 'Mesa', 'ATA']
+                            {'if': {'column_id': c}, 'textAlign': 'left'} for c in ['Emissor', 'Grupo', 'Evento', 'Mesa']
                         ],
                         style_header={
                             'backgroundColor': 'white',
@@ -277,10 +276,10 @@ def historico_page():
                             {"name": "REMETENTE", "id": "REMETENTE"},
                             {"name": "ASSUNTO", "id": "ASSUNTO"},
                             {"name": "EMISSOR", "id": "EMISSOR"},
-                            {"name": "RESPONDEU", "id": "QueRespondeu"},
+                            {"name": "RESPONDIDO", "id": "RESPONDIDO"},
                             {"name": "RESPONDIDO EM", "id": "DataResposta"}
                         ],
-                        data=transf_data.to_dict('records'),
+                        data=alcadas_data.to_dict('records'),
                         filter_action='native',
                         sort_action="native",
                         sort_mode="multi",
