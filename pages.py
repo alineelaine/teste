@@ -11,6 +11,11 @@ def pendencias_page():
 ] + [
     {"name": "RESPONDIDO", "id": "RESPONDIDO", "type": "text", "editable": True}
 ]
+    columns_transf = [
+    {"name": i, "id": i} for i in transferencias_data.columns if i != "RESPONDIDO"
+] + [
+    {"name": "RESPONDIDO", "id": "RESPONDIDO", "type": "text", "editable": True}
+]
     return html.Div([
         dbc.Row([
             dbc.Col(dbc.Card([
@@ -157,10 +162,12 @@ def pendencias_page():
             dash_table.DataTable(
                 data=transferencias_data.to_dict('records'), 
                 id='transferencias', 
-                columns=[{"name": i, "id": i} for i in transferencias_data.columns], 
+                columns=columns_transf, 
+                editable=True,
                 style_table={
                     'margin': 'auto', 
-                    'marginRight': '45px',
+                    'marginRight': 'auto',
+                    'marginLeft': 'auto',
                     'overflowX': 'auto',
                 },
                 style_cell={
@@ -187,9 +194,11 @@ def pendencias_page():
                         'if': {'row_index': 'even'},
                         'backgroundColor': 'white'
                     }
-                ]
-            ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
-        ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
+                ],
+            ),
+        html.Button("Salvar", id="transf-save-button", className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"}),
+        html.Div(id='transf-placeholder-div')  
+    ]), style={'marginLeft': '100px', 'marginTop': '100px'})
     ])
    
 
