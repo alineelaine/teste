@@ -197,7 +197,7 @@ def pendencias_page():
                 ],
             ),
         html.Button("Salvar", id="transf-save-button", className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"}),
-        html.Div(id='transf-placeholder-div')  
+        html.Div(id='transf-placeholder-div') 
     ]), style={'marginLeft': '100px', 'marginTop': '100px'})
     ])
    
