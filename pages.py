@@ -131,7 +131,9 @@ def pendencias_page():
             dash_table.DataTable(
                 data=comite_data.to_dict('records'), 
                 id='comite', 
-                columns=[{"name": i, "id": i} for i in comite_data.columns], 
+                columns=[
+                {"name": i, "id": i, "editable": True if i in ["STATUS", "MESA", "CNPJ", "GRUPO"] else False} for i in comite_data.columns
+            ], 
                 style_table={
                     'margin': 'auto', 
                     'marginRight': '45px',
