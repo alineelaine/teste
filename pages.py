@@ -82,43 +82,45 @@ def pendencias_page():
         html.Div(id='placeholder-div')  # Placeholder para mensagens de retorno
     ]), style={'marginLeft': '100px', 'marginTop': '100px'}),
         dbc.Card(dbc.CardBody([
-            html.H2("Tabela Email", className="text-center"),
-            dash_table.DataTable(
-                data=email_data.to_dict('records'), 
-                id='email', 
-                columns=[{"name": i, "id": i} for i in email_data.columns], 
-                style_table={
-                    'margin': 'auto', 
-                    'marginRight': '45px',
-                    'overflowX': 'auto',
+        html.H2("Tabela Email", className="text-center"),
+        dash_table.DataTable(
+            data=email_data.to_dict('records'), 
+            id='email', 
+            columns=[
+                {"name": i, "id": i, "editable": True if i in ["MESA", "CNPJ", "GRUPO"] else False} for i in email_data.columns
+            ], 
+            style_table={
+                'margin': 'auto', 
+                'marginRight': '45px',
+                'overflowX': 'auto',
+            },
+            style_cell={
+                'textAlign': 'center',
+                'backgroundColor': 'white',
+                'color': 'black',
+                'border': '1px solid lightgray',
+                'border-left': 'none',
+                'border-right': 'none',
+            },
+            style_header={
+                'backgroundColor': 'white',
+                'fontWeight': 'bold',
+                'border': '1px solid lightgray',
+                'border-left': 'none',
+                'border-right': 'none',
+            },
+            style_data_conditional=[
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': 'white'
                 },
-                style_cell={
-                    'textAlign': 'center',
-                    'backgroundColor': 'white',
-                    'color': 'black',
-                    'border': '1px solid lightgray',
-                    'border-left': 'none',
-                    'border-right': 'none',
-                },
-                style_header={
-                    'backgroundColor': 'white',
-                    'fontWeight': 'bold',
-                    'border': '1px solid lightgray',
-                    'border-left': 'none',
-                    'border-right': 'none',
-                },
-                style_data_conditional=[
-                    {
-                        'if': {'row_index': 'odd'},
-                        'backgroundColor': 'white'
-                    },
-                    {
-                        'if': {'row_index': 'even'},
-                        'backgroundColor': 'white'
-                    }
-                ]
-            ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
-        ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
+                {
+                    'if': {'row_index': 'even'},
+                    'backgroundColor': 'white'
+                }
+            ]
+        ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
+    ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
         dbc.Card(dbc.CardBody([
             html.H2("Tabela Comitê", className="text-center"),
             dash_table.DataTable(

@@ -34,22 +34,22 @@ def update_respondido(active_cell, rows):
 def salvar_respondidos(n_clicks, rows):
     return salvar_respondidos_excel(n_clicks, rows)
 
-# Definição do callback para atualizar as transferências respondidas
+
 @app.callback(
     Output('transferencias', 'data'),
     [Input('transferencias', 'active_cell')],
     [State('transferencias', 'data')]
 )
 def update_transf_respondido_callback(active_cell, rows):
-    # Chama a função importada de data.py
+  
     return update_transf_respondido(active_cell, rows)
 
-# Definição do callback para salvar as transferências respondidas
+
 @app.callback(
     Output('transf-placeholder-div', 'children'),
     [Input('transf-save-button', 'n_clicks')],  
     [State('transferencias', 'data')]
 )
 def salvar_transf_respondidos_callback(n_clicks, rows):
-    # Chama a função importada de data.py
+    
     return salvar_transf_respondidos_excel(n_clicks, rows)
