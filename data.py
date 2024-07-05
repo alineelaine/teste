@@ -146,16 +146,16 @@ def update_email_cadastrado(active_cell, rows):
     return rows
 
 
-def salvar_transf_respondidos_excel(n_clicks, rows):
+def salvar_email_cadastrados_excel(n_clicks, rows):
     n_clicks = 1 if n_clicks == 0 else n_clicks
     if n_clicks and n_clicks > 0:
-        respondidos = [row for row in rows if row.get('CADASTRADO') == "Cadastrado"]
-        if respondidos:
+        cadastrados = [row for row in rows if row.get('CADASTRADO') == "Cadastrado"]
+        if cadastrados:
             caminho_controle = 'controle.xlsx'
             caminho_historico = 'historico.xlsx'
             try:
                 controle_df = pd.read_excel(caminho_controle, sheet_name='email')
-                controle_df = controle_df[~controle_df.index.isin([rows.index(row) for row in respondidos])]
+                controle_df = controle_df[~controle_df.index.isin([rows.index(row) for row in cadastrados])]
                 with pd.ExcelWriter(caminho_controle, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
                     controle_df.to_excel(writer, sheet_name='email', index=False)
                 try:
@@ -166,7 +166,7 @@ def salvar_transf_respondidos_excel(n_clicks, rows):
                     row['DataResposta'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 historico_df = pd.concat([historico_df, pd.DataFrame(cadastrados)])
                 with pd.ExcelWriter(caminho_historico, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                    historico_df.to_excel(writer, sheet_name='HistTransf', index=False)
+                    historico_df.to_excel(writer, sheet_name='email', index=False)
 
             except FileNotFoundError as e:
                 return f"Arquivo não encontrado: {e.filename}"

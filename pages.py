@@ -16,6 +16,11 @@ def pendencias_page():
 ] + [
     {"name": "RESPONDIDO", "id": "RESPONDIDO", "type": "text", "editable": True}
 ]
+    columns_email = [
+    {"name": i, "id": i} for i in email_data.columns if i != "CADASTRADO"
+] + [
+    {"name": "CADASTRADO", "id": "CADASTRADO", "type": "text", "editable": True}
+]
     return html.Div([
         dbc.Row([
             dbc.Col(dbc.Card([
@@ -119,7 +124,7 @@ def pendencias_page():
                     'backgroundColor': 'white'
                 }
             ]
-        ), html.Button("Salvar", id="save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
+        ), html.Button("Salvar", id="email-save-button", n_clicks=0, className="btn btn-primary", style={"margin-left": "auto", "margin-top": "20px", "display": "block"})
     ]), style={'marginLeft': '100px', 'marginTop': '50px'}),
         dbc.Card(dbc.CardBody([
             html.H2("Tabela Comitê", className="text-center"),
