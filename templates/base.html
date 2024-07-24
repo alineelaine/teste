@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}SGRE{% endblock %}</title>
+	<script arc="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="/static/css/menu.css">
+	<link rel="stylesheet" href="/static/css/styles.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awsome/4.7.0/css/font-awsome.min.css"/>
+	<link href="https://fonts.googleapis.com/css?family=Titillium+Web:400,600,700" rel="stylesheet">
+</head>
+<body>
+	<div id="wrapper">
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand mb-4">
+					<a href="#"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Menu"></a>
+				</li>
+				<li>
+					<a href="/">Pendências</a>
+				</li>
+				<li>
+					<a href="/historico">Histórico</a>
+				</li>
+				<li>
+					<a href="/ajustes">Ajustes</a>
+				</li>
+				<li>
+					<a href="/controles">Controles</a>
+				</li>
+				<li>
+					<a href="/dados">Dados</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="content">
+		{% block content %}{% endblock %}
+	</div>
+</body>
+</html>

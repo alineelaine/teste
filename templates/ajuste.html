@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajuste - SGRE{% endblock %}
+
+{% block content %}
+<style>
+    .centered-table-container {
+        display: flex;
+        justify-content: center;
+        margin-left: 180px;
+    }
+    .table-box {
+        justify-content: center;
+    }
+</style>
+<div class="content-area">
+    <div class="container-fluid">
+        <div class="main">
+            <div class="col-12">
+                <div class="row mt-4 mb-4 row-2">
+                    <div class="box table-box scrollaable-table centered-table-container">
+                        <h2>[RELATÓRIO DIÁRIO] CRI/CRA</h2>
+                        <table id="criCra_table">{{ criCra_table|safe }}</table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row mt-4 mb-4 row-2">
+                    <div class="box table-box scrollaable-table centered-table-container">
+                        <h2>[RELATÓRIO DIÁRIO] Sem grupo, setor, rating</h2>
+                        <table id="grupoSetor_table">{{ grupoSetor_table|safe }}</table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row mt-4 mb-4 row-2">
+                    <div class="box table-box scrollaable-table centered-table-container">
+                        <h2>[RELATÓRIO DIÁRIO] Ratings divergentes</h2>
+                        <table id="ratingsDiv_table">{{ ratingsDiv_table|safe }}</table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row mt-4 mb-4 row-2">
+                    <div class="box table-box scrollaable-table centered-table-container">
+                        <h2>Limite Meta</h2>
+                        <table id="limMeta_table">{{ limMeta_table|safe }}</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

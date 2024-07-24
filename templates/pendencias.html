@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Pendências - SGRE{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <div class="container-fluid">
+        <div class="main">
+            <div class="row sparkboxes mt-4 mb-4">
+                <div class="col-md-2">
+                    <div class="box box1 first-row-box">
+                        <h2>Pedidos de Alçadas pendentes:</h2>
+                        <p id="count1">{{ alcadas_count }}</p>
+                        <div id="spark1"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="box box2 first-row-box">
+                        <h2>Aprovações por e-mail pendentes:</h2>
+                        <p id="count2">{{ email_count }}</p>
+                        <div id="spark2"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="box box3 first-row-box">
+                        <h2>Aprovações por comitê pendentes:</h2>
+                        <p id="count3">{{ comite_count }}</p>
+                        <div id="spark3"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="box box4 first-row-box">
+                        <h2>Análises de transferências:</h2>
+                        <p id="count4">{{ transferencias_count }}</p>
+                        <div id="spark4"></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mt-4 mb-4 row-2">
+                        <div class="box table-box scrollaable-table">
+                            <h2>Pedidos de Alçadas</h2>
+                            <table id="alcadas_table">
+                                <thead>
+                                    <tr>
+                                        <th>DATA</th>
+                                        <th>HORA</th>
+                                        <th>REMETENTE</th>
+                                        <th>ASSUNTO</th>
+                                        <th>RESPONDIDO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in alcadas_data %}
+                                    <tr>
+                                        <td> value="{{ row.DATA }}">{{ row.DATA }}</td>
+                                        <td> value="{{ row.HORA }}">{{ row.HORA }}</td>
+                                        <td> value="{{ row.REMETENTE }}">{{ row.REMETENTE }}</td>
+                                        <td> value="{{ row.ASSUNTO }}">{{ row.ASSUNTO }}</td>
+                                        <td>
+                                            <input type="checkbox" class="respondido-checkbox large-checkbox"
+                                            data-id="{{ row.id }}" {% if not row.RESPONDIDO%}checked{% endif %}>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <button id="save-button" class="btn btn-primary"
+                            style="margin-left: auto; margin-top: 20px; display: block;">Salvar</button>
+                            <div id="placeholder-div"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mt-4 mb-4 row-2">
+                        <div class="box table-box scrollaable-table">
+                            <h2>Análises de transferências</h2>
+                            <table id="transferencias_table">
+                                <thead>
+                                    <tr>
+                                        <th>DATA</th>
+                                        <th>HORA</th>
+                                        <th>REMETENTE</th>
+                                        <th>ASSUNTO</th>
+                                        <th>RESPONDIDO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in transferencias_data %}
+                                    <tr>
+                                        <td> value="{{ row.DATA }}">{{ row.DATA }}</td>
+                                        <td> value="{{ row.HORA }}">{{ row.HORA }}</td>
+                                        <td> value="{{ row.REMETENTE }}">{{ row.REMETENTE }}</td>
+                                        <td> value="{{ row.ASSUNTO }}">{{ row.ASSUNTO }}</td>
+                                        <td>
+                                            <input type="checkbox" class="respondido-checkbox-transferencias large-checkbox"
+                                            data-id="{{ row.id }}" {% if not row.RESPONDIDO%}checked{% endif %}>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <button id="save-button-transferencias" class="btn btn-primary"
+                            style="margin-left: auto; margin-top: 20px; display: block;">Salvar</button>
+                            <div id="placeholder-div"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mt-4 mb-4 row-2">
+                        <div class="box table-box scrollaable-table">
+                            <h2>Aprovações por e-mail</h2>
+                            <table id="email_table">{{ email_table|safe }}</table>
+                        </div>    
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mt-4 mb-4 row-2">
+                        <div class="box table-box scrollaable-table">
+                            <h2>Aprovações por comitê</h2>
+                            <table id="comite_table">{{ comite_table|safe }}</table>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% endblock %}
