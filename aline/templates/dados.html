@@ -12,10 +12,17 @@
     .table-box {
         justify-content: center;
     }
-    #container {
+    .table-chart-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
         width: 100%;
-        height: 400px;
-        margin: 0 auto;
+    }
+    .chart-box {
+        width: 50%;
+    }
+    .table-box {
+        width: 50%;
     }
 </style>
 <div class="content-area">
@@ -23,25 +30,34 @@
         <div class="main">
             <div class="col-12">
                 <div class="row mt-4 mb-4 row-2">
-                    <div class="box table-box scrollaable-table centered-table-container">
-                        <h2>Solicitações de Alçadas</h2>
-                        <table id="table-responsive">{{ resumo_alcadas_table|safe }}</table>
+                    <div class="table-chart-container">
+                        <div class="box table-box scrollaable-table centered-table-container">
+                            <h2>Solicitações de Alçadas</h2>
+                            <table id="table-responsive">{{ resumo_alcadas_table|safe }}</table>
+                        </div>
+                        <div id="container" class="chart-box"></div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="row mt-4 mb-4 row-2">
-                    <div class="box table-box scrollaable-table centered-table-container">
-                        <h2>Análises de Transferências</h2>
-                        <table id="table-responsive-transf">{{ resumo_transf_table|safe }}</table>
+                    <div class="table-chart-container">
+                        <div class="box table-box scrollaable-table centered-table-container">
+                            <h2>Análises de Transferências</h2>
+                            <table id="table-responsive-transf">{{ resumo_transf_table|safe }}</table>
+                        </div>
+                        <div id="container-transf" class="chart-box"></div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="row mt-4 mb-4 row-2">
-                    <div class="box table-box scrollaable-table centered-table-container">
-                        <h2>Gráfico de Alçadas por Tempo de Resposta</h2>
-                        <div id="container"></div>
+                    <div class="table-chart-container">
+                        <div class="box table-box scrollaable-table centered-table-container">
+                            <h2>Cadastros</h2>
+                            <table id="table-responsive">{{ resumo_cadastros_table|safe }}</table>
+                        </div>
+                        <div id="container-cadastros" class="chart-box"></div>
                     </div>
                 </div>
             </div>
@@ -51,33 +67,81 @@
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const data = {{ alcadas_por_tempo_resposta|tojson }};
-        Highcharts.chart('container', {
-            chart: {
-                type: 'line'
-            },
-            title: {
-                text: 'Quantidade de Alçadas em função do Tempo de Resposta'
-            },
-            xAxis: {
-                title: {
-                    text: 'Tempo de Resposta (dias)'
+    fetch('/dados_grafico')
+        .then(response => response.json())
+        .then(data => {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'line'
                 },
-                categories: data.TempoResposta
-            },
-            yAxis: {
                 title: {
-                    text: 'Quantidade de Alçadas'
-                }
-            },
-            series: [{
-                name: 'Alçadas',
-                data: data.Quantidade
-            }]
+                    text: 'Solicitações de Alçadas por Mês'
+                },
+                xAxis: {
+                    categories: data.meses
+                },
+                yAxis: {
+                    title: {
+                        text: 'Solicitações'
+                    }
+                },
+                series: [{
+                    name: 'Solicitações',
+                    data: data.solicitacoes
+                }]
+            });
         });
-    });
-    
+
+    fetch('/dados_grafico_transf')
+        .then(response => response.json())
+        .then(data => {
+            Highcharts.chart('container-transf', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Solicitações de Transferências por Mês'
+                },
+                xAxis: {
+                    categories: data.meses
+                },
+                yAxis: {
+                    title: {
+                        text: 'Solicitações'
+                    }
+                },
+                series: [{
+                    name: 'Solicitações',
+                    data: data.solicitacoes
+                }]
+            });
+        });
+
+    // Adicionar gráfico para Cadastros, se necessário
+    fetch('/dados_grafico_cadastros')
+        .then(response => response.json())
+        .then(data => {
+            Highcharts.chart('container-cadastros', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Cadastros por Mês'
+                },
+                xAxis: {
+                    categories: data.meses
+                },
+                yAxis: {
+                    title: {
+                        text: 'Cadastros'
+                    }
+                },
+                series: [{
+                    name: 'Cadastros',
+                    data: data.cadastros
+                }]
+            });
+        });
 </script>
 
 {% endblock %}
