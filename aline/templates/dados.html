@@ -12,6 +12,11 @@
     .table-box {
         justify-content: center;
     }
+    #container {
+        width: 100%;
+        height: 400px;
+        margin: 0 auto;
+    }
 </style>
 <div class="content-area">
     <div class="container-fluid">
@@ -19,7 +24,7 @@
             <div class="col-12">
                 <div class="row mt-4 mb-4 row-2">
                     <div class="box table-box scrollaable-table centered-table-container">
-                        <h2>Dados de Solicitações de Alçadas por Mês</h2>
+                        <h2>Solicitações de Alçadas</h2>
                         <table id="table-responsive">{{ resumo_alcadas_table|safe }}</table>
                     </div>
                 </div>
@@ -27,13 +32,52 @@
             <div class="col-12">
                 <div class="row mt-4 mb-4 row-2">
                     <div class="box table-box scrollaable-table centered-table-container">
-                        <h2>Dados de Transferências por Mês</h2>
+                        <h2>Análises de Transferências</h2>
                         <table id="table-responsive-transf">{{ resumo_transf_table|safe }}</table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row mt-4 mb-4 row-2">
+                    <div class="box table-box scrollaable-table centered-table-container">
+                        <h2>Gráfico de Alçadas por Tempo de Resposta</h2>
+                        <div id="container"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const data = {{ alcadas_por_tempo_resposta|tojson }};
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Quantidade de Alçadas em função do Tempo de Resposta'
+            },
+            xAxis: {
+                title: {
+                    text: 'Tempo de Resposta (dias)'
+                },
+                categories: data.TempoResposta
+            },
+            yAxis: {
+                title: {
+                    text: 'Quantidade de Alçadas'
+                }
+            },
+            series: [{
+                name: 'Alçadas',
+                data: data.Quantidade
+            }]
+        });
+    });
+    
+</script>
 
 {% endblock %}

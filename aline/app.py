@@ -14,71 +14,40 @@ def load_data():
 
 
 @app.route('/')
-def pendencias(): 
-    load_data()
-    alcadas_data = df_alcadas.to_dict('records')
-    transferencias_data = df_transferencias.to_dict('records')
-    email_table = df_email.to_html(index=False, classes='table table-striped')
-    comite_table = df_comite.to_html(index=False, classes='table table-striped')
-    transferencias_table = df_transferencias.to_html(index=False, classes='table table-striped')
-    alcadas_count = len(alcadas_data)
-    email_count = len(df_email)
-    comite_count = len(df_comite)
-    transferencias_count = len(transferencias_data)
-    return render_template('pendencias.html', alcadas_data=alcadas_data, transferencias_data=transferencias_data, 
-                           email_table=email_table, comite_table=comite_table, transferencias_table=transferencias_table, 
-                           alcadas_count=alcadas_count, email_count=email_count, comite_count=comite_count, 
-                           transferencias_count=transferencias_count)
+def dados():
+    # Dados de Alçadas
+    df_historico_alcadas = pd.read_excel('historico.xlsx', sheet_name='HistAlcadas')
+    df_historico_alcadas['DATA'] = pd.to_datetime(df_historico_alcadas['DATA'], format='%d/%m/%Y')
+    df_historico_alcadas['DataResposta'] = pd.to_datetime(df_historico_alcadas['DataResposta'], format='%Y-%m-%d %H:%M:%S')
+    df_historico_alcadas['TempoResposta'] = (df_historico_alcadas['DataResposta'] - df_historico_alcadas['DATA']).dt.days
+    df_historico_alcadas['Mês'] = df_historico_alcadas['DATA'].dt.to_period('M')
 
+    resumo_alcadas = df_historico_alcadas.groupby('Mês').agg(
+        Solicitações=('DATA', 'count'),
+        TempoRespostaMédio=('TempoResposta', 'mean')
+    ).reset_index()
 
-@app.route('/update_Alcadasrespondidas', methods=['POST'])
-def update_Alcadasrespondidas():
-    data = request.get_json()
-    if data is None:
-        return({'message': 'Nenhum dado recebido'}), 400
-    
-    row_index = data.get('row_index')
-    if row_index is None or row_index < 0 or row_index >= len(df_alcadas):
-        return({'message': 'Índice de linha inválido'}), 400
-    
-    alcadas_data = pd.read_excel('./controleAlcadas.xlsx', sheet_name='alcadas', engine='openpyxl')
-    alcadas_data.loc[row_index, 'RESPONDIDO'] = 'Respondido'if alcadas_data.loc[row_index, 'RESPONDIDO'] != 'Respondido' else 'Não Respondido'
-    alcadas_data.to_excel('./controleAlcadas.xlsx', sheet_name='alcadas', index=False, engine='openpyxl')
-    return jsonify({'message': 'Atualizado com sucesso'})
+    resumo_alcadas_table = resumo_alcadas.to_html(index=False, classes='table table-striped')
 
-@app.route('/salvar_Alcadasrespondidas', methods=['POST'])
-def salvar_Alcadasrespondidas():
-    try:
-        xls = pd.ExcelFile('controleAlcadas.xlsx')
-        df_alcadas = pd.read_excel(xls, 'alcadas')
+    # Dados de Transferências
+    df_historico_transf = pd.read_excel('historico.xlsx', sheet_name='HistTransf')
+    df_historico_transf['DATA'] = pd.to_datetime(df_historico_transf['DATA'], format='%d/%m/%Y')
+    df_historico_transf['DataResposta'] = pd.to_datetime(df_historico_transf['DataResposta'], format='%Y-%m-%d %H:%M:%S')
+    df_historico_transf['TempoResposta'] = (df_historico_transf['DataResposta'] - df_historico_transf['DATA']).dt.days
+    df_historico_transf['Mês'] = df_historico_transf['DATA'].dt.to_period('M')
 
-        try:
-            df_histAlcadas = pd.read_excel('historico.xlsx', sheet_name='histAlcadas')
-        except FileNotFoundError:
-            df_histAlcadas = pd.DataFrame(columns=['DATA', 'HORA', 'REMETENTE', 'ASSUNTO', 'EMISSOR', 'DataResposta'])  
-    
-        mask = df_alcadas['RESPONDIDO'] == 'Respondido'
-        alcadas_respondidas = df_alcadas[mask]
+    resumo_transf = df_historico_transf.groupby('Mês').agg(
+        Solicitações=('DATA', 'count'),
+        TempoRespostaMédio=('TempoResposta', 'mean')
+    ).reset_index()
 
-        if alcadas_respondidas.empty:
-            return jsonify({'message': 'Nenhuma alcada respondida'}), 400
-        
-        alcadas_respondidas['DataResposta'] = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        df_histAlcadas = pd.concat([df_histAlcadas, alcadas_respondidas], ignore_index=True)
-        df_alcadas = df_alcadas[~mask]
+    resumo_transf_table = resumo_transf.to_html(index=False, classes='table table-striped')
 
-        with pd.ExcelWriter('historico.xlsx', engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-            df_histAlcadas.to_excel(writer, sheet_name='histAlcadas', index=False)
+    # Dados para o gráfico
+    alcadas_por_tempo_resposta = df_historico_alcadas.groupby('TempoResposta').size().reset_index(name='Quantidade')
 
-        with pd.ExcelWriter('controleAlcadas.xlsx', engine='openpyxl', mode='w') as writer:
-            df_alcadas.to_excel(writer, sheet_name='alcadas', index=False)
-            for sheet in xls.sheet_names:
-                if sheet != 'alcadas':
-                    df_other_sheet = pd.read_excel(xls, sheet)
-                    df_other_sheet.to_excel(writer, sheet_name=sheet, index=False)
-        return jsonify({'message': 'Salvo com sucesso'})
-    except Exception as e:
-        return jsonify({'message': 'Internal server error'}), 500
+    # Passar ambas as tabelas e os dados do gráfico para o template
+    return render_template('dados.html', resumo_alcadas_table=resumo_alcadas_table, resumo_transf_table=resumo_transf_table, alcadas_por_tempo_resposta=alcadas_por_tempo_resposta.to_dict(orient='list'))
 
 
 if __name__ == '__main__':

@@ -155,8 +155,30 @@
                 // Handle response here
             });
         });
-    });
 
+        $('#save-button').click(function (){
+            var checkedRows = [];
+            $('.respondido-checkbox:checked').each(function (){
+                var row_index = $(this).closest('tr').index();
+                var data = $(this).closest('tr').find('td').eq(0).text();
+                var hora = $(this).closest('tr').find('td').eq(1).text();
+                var emissor = $(this).closest('tr').find('td').eq(2).text();
+                checkedRows.push({ row_index: row_index, data: data, hora: hora, emissor: emissor });
+            });
+            $.ajax({
+                url: '/salvar_Alcadasrespondidas',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ rows: checkedRows }),
+                    dataType: 'json',
+                }).done(function (response) {
+                    alert('response.message');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('Erro ao salvar respondidos');
+                });
+            });
+        });  
+          
 </script> 
 
 {% endblock %}
