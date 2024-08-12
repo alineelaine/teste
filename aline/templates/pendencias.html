@@ -124,5 +124,39 @@
             </div>
         </div>
     </div>
-</div>  
+</div> 
+<script>
+    $(document).ready(function(){
+        $('.respondido-checkbox').change(function (){
+            var isChecked = $(this).is(':Checked');
+            var data = $(this).closest('tr').find('td').eq(0).text();
+            var hora = $(this).closest('tr').find('td').eq(1).text();
+            var emissor = $(this).closest('tr').find('td').eq(2).text();
+            var row_index = $(this).closest('tr').index();
+
+            if (!isChecked){
+                $(this).closest('tr').addClass('checked');
+            } else {
+                $(this).closest('tr').removeClass('checked');
+            }
+            $.ajax({
+                url: '/update_Alcadasrespondidas',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    row_index: row_index,
+                    data: data,
+                    hora: hora,
+                    emissor: emissor,
+                    respondido: isChecked
+                }),
+                dataType: 'json',
+            }).done(function (response) {
+                // Handle response here
+            });
+        });
+    });
+
+</script> 
+
 {% endblock %}
